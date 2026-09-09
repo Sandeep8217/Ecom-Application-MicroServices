@@ -6,10 +6,12 @@ import com.ecommerce.user.dto.UserRequest;
 import com.ecommerce.user.dto.UserResponse;
 import com.ecommerce.user.models.Address;
 import com.ecommerce.user.models.User;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
-
+import java.util.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -19,6 +21,13 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
+
+    private final MongoTemplate mongoTemplate;
+
+    @PostConstruct
+    public void checkMongoDatabase() {
+        System.out.println("MONGO DATABASE = " + mongoTemplate.getDb().getName());
+    }
 
 //    private List<User>userList = new ArrayList<>();
 //    private Long nextId = 1L;
@@ -54,7 +63,7 @@ public class UserService {
         }
     }
 
-    public Optional<UserResponse> fetchUser(long id) {
+    public Optional<UserResponse> fetchUser(String id) {
 //        for(User user : userList){
 //            if(user.getId().equals(id)){
 //                return user;
@@ -64,11 +73,11 @@ public class UserService {
 //        the above for loop can be replaced by java stream
 //        return userList.stream().filter(user -> user.getId().equals(id)).
 //                findFirst();
-        return userRepository.findById(id)
+        return userRepository.findById(String.valueOf(id))
                 .map(this::mapToUserResponse);
 
     }
-    public boolean updateUser(Long id , UserRequest updatedUserRequest){
+    public boolean updateUser(String id , UserRequest updatedUserRequest){
         return userRepository.findById(id)
                 .map(existingUser ->{
                     updateUserFromRequest(existingUser, updatedUserRequest);

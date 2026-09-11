@@ -3,8 +3,9 @@ spring:
     name: user-service
 
   mongodb:
-    uri: mongodb+srv://SandeepKarne:SpringBoot123456@cluster0.4lre50d.mongodb.net/?appName=Cluster0
-    database: userdb
+#    uri: mongodb+srv://SandeepKarne:SpringBoot123456@cluster0.4lre50d.mongodb.net/?appName=Cluster0
+    uri: mongodb://localhost:27017/ecom_user
+    database: ecom_user
 
 server:
   port: 8082
